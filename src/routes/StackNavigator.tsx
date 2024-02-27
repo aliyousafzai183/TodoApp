@@ -15,11 +15,17 @@ const StackNavigator = () => {
                 <Stack.Screen
                     name={RouteName?.SPLASH_SCREEN}
                     component={SplashScreen}
+                    options={{
+                        headerShown: false
+                    }}
                 />
 
                 <Stack.Screen
                     name={RouteName?.HOME_SCREEN}
                     component={HomeScreen}
+                    options={{
+                        headerShown: false
+                    }}
                 />
 
             </Stack.Navigator>

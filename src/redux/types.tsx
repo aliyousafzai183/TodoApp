@@ -1,10 +1,14 @@
 // src/redux/types.ts
-import { TodosType } from "./reducers/Todos";
+import { TodosArrayType } from "./reducers/Todos";
 import { Loading } from "./reducers/LoadingSlice";
 import { DarkModeType } from "./reducers/DarkModeSlice";
+import { ToggleModalType } from "./reducers/ToggleModalSlice";
+import { selectedTodoType } from "./reducers/selectedTodoSlice";
 
 export interface RootState {
-  TodosType: TodosType,
+  Todos: TodosArrayType,
   Loading: Loading,
-  DarkMode: DarkModeType
+  DarkMode: DarkModeType,
+  ToggleModal: ToggleModalType,
+  SelectedTodo: selectedTodoType
 }

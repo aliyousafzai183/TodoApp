@@ -1,12 +1,10 @@
-import React, {
-    useEffect
-} from 'react';
+// import Statements
+import React, { useEffect } from 'react';
 import {
-    View,
-    StatusBar,
-    StyleSheet,
-    Image,
-    useColorScheme
+  View,
+  StatusBar,
+  Image,
+  useColorScheme
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/types';
@@ -16,65 +14,66 @@ import tw from '../../utils/tailwind';
 import { RouteName } from '../../routes/RouteName';
 import { changeDarkMode } from '../../redux/reducers/DarkModeSlice';
 
+// type definition
 type props = {
-    navigation: any;
-}
+  navigation: any;
+};
 
-const Splash = ({ navigation }: any) => {
-    const dispatch = useDispatch();
-    const darkMode = useSelector((state: RootState) => state.DarkMode?.darkMode);
-    const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
-    const appColorScheme = useColorScheme();
+// Splash Screen
+const Splash = ({ navigation }: props) => {
 
-    const loadTheme = async () => {
-        try {
-            if (appColorScheme === 'dark') {
-                setColorScheme('dark');
-                dispatch(changeDarkMode({ darkMode: true }));
-            } else {
-                setColorScheme('light');
-                dispatch(changeDarkMode({ darkMode: false }));
-            }
+  // redux
+  const dispatch = useDispatch();
+  const darkMode = useSelector((state: RootState) => state.DarkMode?.darkMode);
 
-        } catch (error) {
-            console.log(error);
+  // color scheme
+  const [colorScheme, toggleColorScheme, setColorScheme] = useAppColorScheme(tw);
+  const appColorScheme = useColorScheme();
 
-            showToast({
-                type: 'alert',
-                description: 'THEME-SWITCH-ERROR',
-            });
-        } finally {
-            navigation.replace(RouteName?.HOME_SCREEN);
+  // useffect to load color scheme and wait for 2 seconds
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      try {
+        if (appColorScheme === 'dark') {
+          setColorScheme('dark');
+          dispatch(changeDarkMode({ darkMode: true }));
+        } else {
+          setColorScheme('light');
+          dispatch(changeDarkMode({ darkMode: false }));
         }
-    }
+        navigation.replace(RouteName?.HOME_SCREEN); // Navigate after 2 seconds
+      } catch (error) {
+        console.log(error);
+        showToast({
+          type: 'alert',
+          description: `Failed to switch to ${colorScheme} mode!`,
+        });
+      }
+    }, 2000); // Delay navigation for 2 seconds
 
-    useEffect(() => {
-        loadTheme();
-    }, []);
+    return () => clearTimeout(interval); // Clear timer on component unmount
+  }, []);
 
-    return (
-        <View style={styles.container}>
-            <StatusBar hidden={true} />
-            <Image
-                style={styles.image}
-                source={require('../../constants/Splash.jpg')}
-            />
-        </View>
-    )
+  return (
+    <View
+      style={tw`h-full w-full items-center justify-center bg-hblue-900`}
+    >
+
+      {/* hiding the status bar on splash screen*/}
+      <StatusBar hidden={true} />
+
+      {/* showing image for splash */}
+      <Image
+        style={[
+          tw`h-full w-full`,
+          {
+            resizeMode: 'cover'
+          }
+        ]}
+        source={require('../../constants/Splash.jpg')}
+      />
+    </View>
+  );
 };
 
 export default Splash;
-
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'trasparent'
-    },
-
-    image: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover'
-    }
-});

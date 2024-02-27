@@ -1,39 +1,50 @@
-// src/redux/reducers/customerSettingsSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface TodosType {
-  statusId: number | null;
-  customerId: number;
-  notificationStatus: boolean;
-  TFASetting: string;
-  darkMode: boolean;
-  isArabic: boolean;
+// Interface for a single todo object
+export interface TodoType {
+  description: string | null;
+  isCompleted: boolean | null;
 }
 
-const initialState: TodosType = {
-  statusId: null,
-  customerId: 0,
-  isArabic: false,
-  notificationStatus: true,
-  darkMode: true,
-  TFASetting: '',
+// Interface for the todos state (array of Todo objects)
+export interface TodosArrayType {
+  todos: TodoType[];
+}
+
+// Initial state with an empty array of todos
+const initialState: TodosArrayType = {
+  todos: [],
 };
 
-const TodoSlice:any = createSlice({
+const TodoSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    updateTodo: (state, action: PayloadAction<Partial<TodosType>>) => {
-      return { ...state, ...action.payload };
+    // Add a new todo to the array
+    addTodo: (state, action: PayloadAction<TodoType>) => {
+      state.todos.push(action.payload);
     },
-    addTodo: (state, action: PayloadAction<Partial<TodosType>>) => {
-      return { ...state, ...action.payload };
+
+    // Update a todo at a specific index
+    updateTodo: (state, action: PayloadAction<{ index: number | null; todo: Partial<TodoType> }>) => {
+      const { index, todo } = action.payload;
+
+      console.log(index);
+
+      if (index !== null) {
+        state.todos[index] = { ...state.todos[index], ...todo };
+      } else {
+        console.log("Index is null");
+      }
     },
-    deleteTodo: (state, action: PayloadAction<Partial<TodosType>>) => {
-      return { ...state, ...action.payload };
+
+    // Delete a todo at a specific index
+    deleteTodo: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      state.todos.splice(index, 1);
     },
   },
 });
 
-export const { updateTodo, addTodo, deleteTodo } = TodoSlice.actions;
+export const { addTodo, updateTodo, deleteTodo } = TodoSlice.actions;
 export default TodoSlice.reducer;
