@@ -10,7 +10,7 @@ const initialState: DarkModeType = {
 };
 
 const DarkModeSlice = createSlice({
-    name: 'darkMode',
+    name: 'delete',
     initialState,
     reducers: {
         setDarkMode: (state, action: PayloadAction<Partial<DarkModeType>>) => {

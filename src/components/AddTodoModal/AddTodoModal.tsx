@@ -52,7 +52,7 @@ const ModalComponent = () => {
     const handleSave = () => {
         try {
             const isUpdating = selectedTodo?.index !== null;
-            const newTodo = { description: value, isCompleted: false, index: todosLength };
+            const newTodo: any = { description: value, isCompleted: false, index: isUpdating ? selectedTodo?.index : todosLength };
             isUpdating ? dispatch(updateTodo({ index: selectedTodo?.index, todo: newTodo })) : dispatch(addTodo(newTodo));
         } catch (error) {
             console.log(error);
