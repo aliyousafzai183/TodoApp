@@ -12,7 +12,6 @@ import { updateTodo } from '../../redux/reducers/Todos';
 import { useDispatch } from 'react-redux';
 import { showToast } from '../Toast/Toast';
 import { updateToggleModal } from '../../redux/reducers/ToggleModalSlice';
-import { AddTodoModal } from '../AddTodoModal';
 import { updateSelectedTodo } from '../../redux/reducers/selectedTodoSlice';
 
 // type defined of todo
