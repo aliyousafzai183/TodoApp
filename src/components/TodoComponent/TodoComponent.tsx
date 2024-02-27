@@ -45,7 +45,7 @@ const TodoComponent = ({
             });
 
         }
-    }
+    };
 
     const handleTodoPress = async () => {
         try {
@@ -63,7 +63,7 @@ const TodoComponent = ({
                 description: 'Error Loading Modal!'
             });
         }
-    }
+    };
 
     return (
         <TouchableOpacity
@@ -77,17 +77,20 @@ const TodoComponent = ({
                 style={tw`flex-row items-center justify-start`}
             >
                 <Pressable
-                    style={tw`w-5 h-5 items-center justify-center border-black-500 border dark:border-black-100 rounded-full mr-3 `}
                     onPress={handleCompleteTodo}
                 >
-                    {
-                        isCompleted && (
-                            <MaterialIcons
-                                name="check"
-                                style={tw`text-xs `}
-                            />
-                        )
-                    }
+                    <View
+                        style={tw`w-5 h-5 items-center justify-center border-black-500 border dark:border-black-100 rounded-full mr-3 `}
+                    >
+                        {
+                            isCompleted && (
+                                <MaterialIcons
+                                    name="check"
+                                    style={tw`text-xs `}
+                                />
+                            )
+                        }
+                    </View>
                 </Pressable>
 
                 <Text

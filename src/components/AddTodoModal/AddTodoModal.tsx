@@ -90,7 +90,28 @@ const ModalComponent = () => {
         } finally {
             setValue('');
         }
-    }
+    };
+
+    // function to mark a todo as done
+    const handleCompleteTodo = () => {
+        try {
+            dispatch(updateTodo({
+                index: SelectedTodo?.index,
+                todo: {
+                    isCompleted: true
+                }
+            }));
+
+            handleRequestClose();
+        } catch (error) {
+            console.log(error);
+            showToast({
+                type: 'error',
+                description: `Failed to mark this todo as Done`
+            });
+
+        }
+    };
 
     return (
         <Modal
@@ -121,12 +142,29 @@ const ModalComponent = () => {
                         }}
                     />
 
-                    <TouchableOpacity
-                        style={tw`self-end border border-hblue-900 px-5 py-1 rounded-full`}
-                        onPress={handleSave}
+                    <View
+                        style={tw`flex-row flex-row-reverse justify-between items-center mt-8 mb-2`}
                     >
-                        <Text style={tw`text-hblue-900 font-semibold text-sm`}>{SelectedTodo?.description ? 'Save' : 'Add'}</Text>
-                    </TouchableOpacity>
+
+                        <TouchableOpacity
+                            style={tw`self-end border border-hblue-900 px-5 py-1 rounded-full`}
+                            onPress={handleSave}
+                        >
+                            <Text style={tw`text-hblue-900 font-semibold text-sm`}>{SelectedTodo?.description ? 'Save' : 'Add'}</Text>
+                        </TouchableOpacity>
+
+                        {
+                            SelectedTodo?.description && (
+                                <TouchableOpacity
+                                    style={tw`self-end border border-purple-900 px-5 py-1 rounded-lg`}
+                                    onPress={handleCompleteTodo}
+                                >
+                                    <Text style={tw`text-purple-900 font-semibold text-sm`}>Mark as Done?</Text>
+                                </TouchableOpacity>
+                            )
+                        }
+
+                    </View>
 
                 </Pressable>
             </Pressable>

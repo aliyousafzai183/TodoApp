@@ -76,7 +76,7 @@ const HomeScreen = () => {
 
                 {/* todos count */}
                 {
-                    incompleteTodos && (
+                    incompleteTodos && incompleteTodos?.length > 0 && (
                         <Text
                             style={tw`text-sm text-black-500 dark:text-black-100`}
                         >
@@ -103,7 +103,7 @@ const HomeScreen = () => {
                 }
 
                 {/* Text "Done" to separate incomplete and completed todos */}
-                {incompleteTodos && incompleteTodos?.length > 0 &&
+                {completedTodos && completedTodos?.length > 0 &&
                     <Text
                         style={tw`text-sm text-black-500 dark:text-black-100 px-1 ${incompleteTodos ? 'mt-2' : 'mt-0'}`}
                     >
