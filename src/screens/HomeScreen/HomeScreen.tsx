@@ -37,6 +37,7 @@ const HomeScreen = () => {
         setCompletedTodos(completed);
     }, [todos]); // Re-run effect when todos change
 
+    // function to toggle modal value
     const updateModalValue = () => {
         try {
             dispatch(updateToggleModal({ showModal: !modalValue }));
@@ -94,7 +95,7 @@ const HomeScreen = () => {
                     incompleteTodos?.map((item, index) =>
                         <TodoComponent
                             key={index}
-                            index={index}
+                            index={item?.index}
                             description={item?.description}
                             isCompleted={item?.isCompleted}
                         />
@@ -102,7 +103,7 @@ const HomeScreen = () => {
                 }
 
                 {/* Text "Done" to separate incomplete and completed todos */}
-                {incompleteTodos &&
+                {incompleteTodos && incompleteTodos?.length > 0 &&
                     <Text
                         style={tw`text-sm text-black-500 dark:text-black-100 px-1 ${incompleteTodos ? 'mt-2' : 'mt-0'}`}
                     >
@@ -114,7 +115,7 @@ const HomeScreen = () => {
                     completedTodos?.map((item, index) =>
                         <TodoComponent
                             key={index}
-                            index={index}
+                            index={item?.index}
                             description={item?.description}
                             isCompleted={item?.isCompleted}
                         />

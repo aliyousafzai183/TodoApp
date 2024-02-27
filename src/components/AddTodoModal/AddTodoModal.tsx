@@ -5,7 +5,8 @@ import {
     Text,
     Modal,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    Pressable
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/types';
@@ -13,23 +14,39 @@ import { updateToggleModal } from '../../redux/reducers/ToggleModalSlice';
 import tw from '../../utils/tailwind';
 import { addTodo, updateTodo } from '../../redux/reducers/Todos';
 import { showToast } from '../Toast/Toast';
-import { updateLoading } from '../../redux/reducers/LoadingSlice';
 import { updateSelectedTodo } from '../../redux/reducers/selectedTodoSlice';
 
 const ModalComponent = () => {
     const dispatch = useDispatch();
     const showModalBool = useSelector((state: RootState) => state?.ToggleModal?.showModal);
     const SelectedTodo = useSelector((state: RootState) => state?.SelectedTodo);
+    const TodosLength = useSelector((state: RootState) => state?.Todos?.todos?.length);
 
+    // use state to temporarily hold value until save or add is pressed
     const [value, setValue] = useState<string>('');
 
+    // useeffect to assign value to temporary use state
     useEffect(() => {
         setValue(SelectedTodo?.description ? SelectedTodo?.description : '');
-    }, [SelectedTodo])
+    }, [SelectedTodo]);
 
-    console.log(SelectedTodo);
+    // function to reset the selected todo for future use.
+    const resetSelectedTodo = () => {
+        try {
+            dispatch(updateSelectedTodo({
+                description: null,
+                index: null
+            }))
+        } catch (error) {
+            console.log(error);
+            showToast({
+                type: 'error',
+                description: 'Error! Try again later.'
+            });
+        }
+    };
 
-
+    // function to save or edit todo
     const handleSave = () => {
         try {
             const isUpdating = SelectedTodo?.index !== null ? true : false;
@@ -41,16 +58,12 @@ const ModalComponent = () => {
                         isCompleted: false
                     }
                 }));
-                if (SelectedTodo) {
-                    dispatch(updateSelectedTodo({
-                        description: null,
-                        index: null
-                    }))
-                }
+                resetSelectedTodo();
             } else {
                 dispatch(addTodo({
                     description: value,
-                    isCompleted: false
+                    isCompleted: false,
+                    index: TodosLength
                 }));
             }
         } catch (error) {
@@ -65,17 +78,17 @@ const ModalComponent = () => {
         }
     };
 
+    // function for modal close request
     const handleRequestClose = () => {
         try {
             dispatch(updateToggleModal({ showModal: !showModalBool }));
             if (SelectedTodo) {
-                dispatch(updateSelectedTodo({
-                    description: null,
-                    index: null
-                }))
+                resetSelectedTodo();
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            setValue('');
         }
     }
 
@@ -88,10 +101,16 @@ const ModalComponent = () => {
             transparent={true}
         >
             {/* Modal container */}
-            <View style={tw`flex-1 justify-center items-center bg-blackTransparent`}>
+            <Pressable
+                style={tw`flex-1 justify-center items-center bg-blackTransparent`}
+                onPress={handleRequestClose}
+            >
 
                 {/* Modal content */}
-                <View style={tw`bg-fullbg rounded-t-lg p-5 w-full`}>
+                <Pressable
+                    style={tw`bg-fullbg dark:bg-dblack-500 rounded-t-3xl p-5 w-full`}
+                    onPress={() => { }}
+                >
 
                     <TextInput
                         placeholder='Your todo here'
@@ -109,8 +128,8 @@ const ModalComponent = () => {
                         <Text style={tw`text-hblue-900 font-semibold text-sm`}>{SelectedTodo?.description ? 'Save' : 'Add'}</Text>
                     </TouchableOpacity>
 
-                </View>
-            </View>
+                </Pressable>
+            </Pressable>
         </Modal>
     )
 };

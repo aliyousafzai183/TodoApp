@@ -4,6 +4,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface TodoType {
   description: string | null;
   isCompleted: boolean | null;
+  index: number;
 }
 
 // Interface for the todos state (array of Todo objects)
