@@ -1,4 +1,4 @@
-// TodoComponent
+// import statements
 import React from 'react';
 import {
     View,
@@ -15,6 +15,7 @@ import { updateToggleModal } from '../../redux/reducers/ToggleModalSlice';
 import { AddTodoModal } from '../AddTodoModal';
 import { updateSelectedTodo } from '../../redux/reducers/selectedTodoSlice';
 
+// type defined of todo
 type TodoType = {
     description: string | null;
     isCompleted: boolean | null;
@@ -29,6 +30,7 @@ const TodoComponent = ({
 
     const dispatch = useDispatch();
 
+    // function to complete the incompleted selected todo
     const handleCompleteTodo = () => {
         try {
             dispatch(updateTodo({
@@ -47,6 +49,7 @@ const TodoComponent = ({
         }
     };
 
+    // function to handle todo press to show modal
     const handleTodoPress = async () => {
         try {
             if (!isCompleted) {
