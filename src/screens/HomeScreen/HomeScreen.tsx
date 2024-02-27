@@ -35,6 +35,9 @@ const HomeScreen = () => {
 
     const [selectedAll, setSelectAll] = useState<boolean>(false);
 
+    console.log(todos);
+
+
     useEffect(() => {
         // Filter todos into incomplete and completed arrays when todos change
         const incomplete = todos.filter(todo => !todo.isCompleted);
@@ -63,8 +66,8 @@ const HomeScreen = () => {
                 dispatch(removeAllCheckedTodos());
             } else {
                 setSelectAll(true);
-                todos?.map((item, index) => (
-                    dispatch(addCheckedTodo(index))
+                todos?.map((item) => (
+                    dispatch(addCheckedTodo(item?.index))
                 ));
             }
         } catch (error) {
@@ -85,8 +88,10 @@ const HomeScreen = () => {
 
     const handleDeleteTodos = async () => {
         try {
-            await checkedTodos?.map((item, index) => (
-                dispatch(deleteTodo(index))
+            console.log(checkedTodos);
+            
+            await checkedTodos?.map((item) => (
+                dispatch(deleteTodo(item))
             ));
             handleClearSelected();
         } catch (error) {

@@ -97,6 +97,7 @@ const TodoComponent = ({
         <TouchableOpacity
             style={tw`w-full flex-row items-center justify-between my-2 py-4 rounded-lg px-5
             ${isCompleted ? 'bg-gray-300 dark:bg-dblack-100' : 'bg-gray-200 dark:bg-dblack-100'}
+            ${isChecked ? 'bg-red-600 dark:bg-black-700' : ''}
             `}
             onPress={handleTodoPress}
             onLongPress={handleTodoLongPress}

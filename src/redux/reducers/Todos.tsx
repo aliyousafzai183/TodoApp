@@ -26,23 +26,24 @@ const TodoSlice = createSlice({
       state.todos.push(action.payload);
     },
 
-    // Update a todo at a specific index
-    updateTodo: (state, action: PayloadAction<{ index: number | null; todo: Partial<TodoType> }>) => {
+    // Update a todo with a matching index
+    updateTodo: (state, action: PayloadAction<{ index: number; todo: Partial<TodoType> }>) => {
       const { index, todo } = action.payload;
-
-      console.log(index);
-
-      if (index !== null) {
-        state.todos[index] = { ...state.todos[index], ...todo };
-      } else {
-        console.log("Index is null");
+      const todoToUpdate = state.todos.find(t => t.index === index);
+      if (todoToUpdate) {
+        Object.assign(todoToUpdate, todo);
       }
     },
 
-    // Delete a todo at a specific index
+    // Delete a todo with a matching index
     deleteTodo: (state, action: PayloadAction<number>) => {
-      const index = action.payload;
-      state.todos.splice(index, 1);
+      const indexToDelete = action.payload;
+      console.log(indexToDelete);
+      
+      const index = state.todos.findIndex(t => t.index === indexToDelete);
+      if (index !== -1) {
+        state.todos.splice(index, 1);
+      }
     },
   },
 });

@@ -24,7 +24,7 @@ const ModalComponent = () => {
     const dispatch = useDispatch();
     const showModalBool = useSelector((state: RootState) => state?.ToggleModal?.showModal);
     const selectedTodo = useSelector((state: RootState) => state?.SelectedTodo);
-    const todosLength = useSelector((state: RootState) => state?.Todos?.todos?.length);
+    const todos = useSelector((state: RootState) => state?.Todos?.todos);
 
     // to take ref of textinput and focus on visibilty
     const inputRef = useRef<TextInput>(null);
@@ -48,11 +48,29 @@ const ModalComponent = () => {
         dispatch(updateSelectedTodo({ description: null, index: null }));
     };
 
+    const getMaxNumberFromTodosIndexes = async () => {
+        try {
+            let max = 0;
+            await todos?.forEach((item) => {
+                if (item?.index > max) {
+                    max = item?.index;
+                }
+            });
+    
+            return max + 1; // Increment by 1 to get the next available index
+        } catch (error) {
+            console.log(error);
+            return 0;
+        }
+    }
+    
+
     // function to save or edit todo
-    const handleSave = () => {
+    const handleSave = async () => {
         try {
             const isUpdating = selectedTodo?.index !== null;
-            const newTodo: any = { description: value, isCompleted: false, index: isUpdating ? selectedTodo?.index : todosLength };
+            let maxNumber = await getMaxNumberFromTodosIndexes();
+            const newTodo: any = { description: value, isCompleted: false, index: isUpdating ? selectedTodo?.index : maxNumber };
             isUpdating ? dispatch(updateTodo({ index: selectedTodo?.index, todo: newTodo })) : dispatch(addTodo(newTodo));
         } catch (error) {
             console.log(error);
@@ -118,6 +136,7 @@ const ModalComponent = () => {
                             <TouchableOpacity
                                 style={tw`self-end border border-hblue-900 px-5 py-1 rounded-full`}
                                 onPress={handleSave}
+                                disabled={value?.length === 0}
                             >
                                 <Text style={tw`text-hblue-900 font-semibold text-sm`}>{selectedTodo?.description ? 'Save' : 'Add'}</Text>
                             </TouchableOpacity>
